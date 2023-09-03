@@ -1,19 +1,23 @@
-from django.shortcuts import render
-from .models import Student
+from django.shortcuts import render,redirect
+from .models import *
 
 # Create your views here.
 
 def index(request):
     return render(request,'index.html')
 
-def show(request):
-    return render(request,'show.html')
+def upload(request):
+    if request.method=='POST':
+        imagename=request.POST['name']
+        image2=request.FILES['image']
+        user=ImageUpload.objects.create(Name=imagename,Image=image2)
+        #return render(request,'submit.html')
+        return redirect(all_data)
+    
 
-def register(request):
-    return render(request,'register.html')
+def all_data(request):
+    user=ImageUpload.objects.all()
+    #return render(request,'index.html',{'key2':user})
+    return render(request,'imageseen.html',{'key2':user})
+    
 
-def content(request):
-    email=request.POST['email']
-    fname=request.POST['fname']
-    user=Student.objects.create(Email=email,Name=fname)
-    return render(request,'submit.html')
